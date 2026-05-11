@@ -14,8 +14,10 @@ const CARDS = [
   {
     title: "Pioneers",
     subtitle: "Legacy In The Making",
-    content: "We're dedicated to creating the industry narrative that others follow 3 years from now. We paved the path for creative SEO, multi-channel search with Digital PR, and Social Search and we will continue to do it.",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800",
+    content:
+      "We're dedicated to creating the industry narrative that others follow 3 years from now. We paved the path for creative SEO, multi-channel search with Digital PR, and Social Search and we will continue to do it.",
+    image:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800",
     bg: "bg-black",
     text: "text-white",
     rotate: "-rotate-1",
@@ -23,8 +25,10 @@ const CARDS = [
   {
     title: "Award Winning",
     subtitle: "A roll top bath full of 79 awards",
-    content: "Voted The Drum's best agency outside of London, we've won 79 awards in just 4 years. From Best Large Agency to Best Campaign, we're consistent winners on the global stage.",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
+    content:
+      "Voted The Drum's best agency outside of London, we've won 79 awards in just 4 years. From Best Large Agency to Best Campaign, we're consistent winners on the global stage.",
+    image:
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
     bg: "bg-mint",
     text: "text-grey-900",
     rotate: "rotate-1",
@@ -32,8 +36,10 @@ const CARDS = [
   {
     title: "Speed",
     subtitle: "Of Culture",
-    content: "People ask us why we are called Rise at Seven? Ever heard the saying Early Bird catches the worm? We move at the speed of culture. We don't just react to trends; we predict them.",
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800",
+    content:
+      "People ask us why we are called Rise at Seven? Ever heard the saying Early Bird catches the worm? We move at the speed of culture. We don't just react to trends; we predict them.",
+    image:
+      "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800",
     bg: "bg-white",
     text: "text-grey-900",
     rotate: "-rotate-1",
@@ -52,7 +58,7 @@ export function Pioneers() {
       cardRefs.current.forEach((card, i) => {
         if (!card) return;
         const isLast = i === CARDS.length - 1;
-        
+
         ScrollTrigger.create({
           trigger: card,
           start: "top top",
@@ -73,7 +79,7 @@ export function Pioneers() {
               start: "top bottom",
               end: "top top",
               scrub: true,
-            }
+            },
           });
         }
       });
@@ -88,18 +94,22 @@ export function Pioneers() {
         {CARDS.map((card, i) => (
           <div
             key={card.title}
-            ref={(el) => { cardRefs.current[i] = el; }}
-            className="sticky top-0 flex min-h-screen w-full flex-col items-center justify-center"
+            ref={(el) => {
+              cardRefs.current[i] = el;
+            }}
+            className="sticky top-0 flex min-h-[65vh] w-full flex-col items-center justify-center"
           >
-            <div className="w-full px-4 | md:px-7">
-              <div className={cn(
-                "relative mx-auto flex max-w-4xl flex-col items-center rounded-[3rem] px-8 py-20 text-center shadow-2xl transition-transform duration-500 | md:px-16 md:py-32",
-                card.bg,
-                card.text,
-                card.rotate
-              )}>
+            <div className="w-full px-4 | md:px-6">
+              <div
+                className={cn(
+                  "relative mx-auto flex max-w-3xl flex-col items-center rounded-[1.5rem] px-4 py-12 text-center shadow-2xl transition-transform duration-500 | md:px-10 md:py-16",
+                  card.bg,
+                  card.text,
+                  card.rotate,
+                )}
+              >
                 {/* Icon/Image at Top Center */}
-                <div className="relative mb-12 h-24 w-24 overflow-hidden rounded-2xl | md:h-32 md:w-32">
+                <div className="relative mb-8 h-16 w-16 overflow-hidden rounded-2xl | md:h-24 md:w-24">
                   <Image
                     src={card.image}
                     alt={card.title}
@@ -109,17 +119,17 @@ export function Pioneers() {
                 </div>
 
                 {/* Subtitle */}
-                <span className="mb-4 text-xs font-bold uppercase tracking-widest opacity-60">
+                <span className="mb-3 text-[0.65rem] font-bold uppercase tracking-[0.35em] opacity-60">
                   {card.subtitle}
                 </span>
 
                 {/* Title */}
-                <h2 className="mb-8 text-5xl font-medium tracking-tighter | md:text-8xl">
+                <h2 className="mb-5 text-3xl font-medium tracking-tight | md:text-5xl">
                   {card.title}
                 </h2>
 
                 {/* Content */}
-                <p className="max-w-2xl text-xl font-medium leading-tight tracking-tight | md:text-2xl">
+                <p className="max-w-xl text-base font-medium leading-relaxed tracking-tight | md:text-lg">
                   {card.content}
                 </p>
 
@@ -127,8 +137,10 @@ export function Pioneers() {
                 <Link
                   href="/contact"
                   className={cn(
-                    "mt-12 group flex items-center gap-2 rounded-full px-8 py-4 text-sm font-medium transition-all duration-300 | pointer-fine:hover:scale-105",
-                    card.bg === "bg-black" ? "bg-mint text-grey-900" : "bg-black text-white"
+                    "mt-8 group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 | pointer-fine:hover:scale-105",
+                    card.bg === "bg-black"
+                      ? "bg-mint text-grey-900"
+                      : "bg-black text-white",
                   )}
                 >
                   Send Us Your Brief
