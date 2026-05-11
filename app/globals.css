@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mint: #b2f6e3;
+  --color-grey-50: #f7f7f7;
+  --color-grey-100: #efeeec;
+  --color-grey-200: #e9e9e9;
+  --color-grey-300: #bebebe;
+  --color-grey-400: #3a3a3a;
+  --color-grey-500: #6a6a6a;
+  --color-grey-900: #111212;
+
+  --font-sans-primary: "saans", ui-sans-serif, system-ui, sans-serif;
+
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+
+  --radius-3xl: 1.5rem;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@font-face {
+  font-family: "saans";
+  src: url("/fonts/SaansLight.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "saans";
+  src: url("/fonts/SaansRegular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "saans";
+  src: url("/fonts/SaansMedium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "saans";
+  src: url("/fonts/SaansSemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "saans";
+  src: url("/fonts/SaansBold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --mask-colour: var(--color-grey-100);
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  background-color: var(--color-grey-100);
+  color: var(--color-grey-900);
+  font-family: var(--font-sans-primary);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+html.hide-cursor,
+html.hide-cursor body,
+body.hide-cursor {
+  cursor: none !important;
+}
+
+@media (pointer: coarse) {
+  html.hide-cursor,
+  html.hide-cursor body,
+  body.hide-cursor {
+    cursor: auto !important;
+  }
+}
+
+@utility transition-rounded {
+  transition-property: border-radius;
+  transition-timing-function: var(--ease-out-expo);
+  transition-duration: 400ms;
+}
+
+@keyframes marquee-lin {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-linear {
+  animation: marquee-lin 45s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-linear {
+    animation: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-grey-900);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-mint);
+  border-radius: 10px;
+}
