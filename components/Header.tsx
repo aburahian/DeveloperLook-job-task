@@ -37,9 +37,9 @@ const NAV: NavItem[] = [
 ];
 
 const MOBILE_NAV = [
-  { 
-    label: "Services", 
-    href: "/services", 
+  {
+    label: "Services",
+    href: "/services",
     sub: [
       { label: "Digital PR", href: "/services" },
       { label: "Search & Growth Strategy", href: "/services" },
@@ -47,19 +47,33 @@ const MOBILE_NAV = [
       { label: "Content Experience", href: "/services" },
       { label: "Data & Insights", href: "/services" },
       { label: "Onsite SEO", href: "/services" },
-    ]
+    ],
   },
-  { 
-    label: "Industries", 
+  {
+    label: "Industries",
     href: "/services",
     sub: [
       { label: "B2B Marketing", href: "/services" },
       { label: "Retail", href: "/services" },
       { label: "Travel", href: "/services" },
-    ]
+    ],
   },
-  { label: "International", href: "/international", sub: [] },
-  { label: "About", href: "/about", sub: [] },
+  {
+    label: "International",
+    href: "/international",
+    sub: [
+      { label: "US Digital PR", href: "/international" },
+      { label: "EU & Global", href: "/international" },
+    ],
+  },
+  {
+    label: "About",
+    href: "/about",
+    sub: [
+      { label: "About Rise at Seven", href: "/about" },
+      { label: "Meet The Risers", href: "/meet-the-team" },
+    ],
+  },
   { label: "Work", href: "/work", badge: "25" },
   { label: "Careers", href: "/careers" },
   { label: "Blog", href: "/blog" },
@@ -79,6 +93,20 @@ export function Header() {
   const megaA = useRef<HTMLDivElement>(null);
   const megaB = useRef<HTMLDivElement>(null);
   const prevMegaDims = useRef<{ w: number; h: number } | null>(null);
+
+  const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const closeMega = () => {
+    if (closeTimeout.current) clearTimeout(closeTimeout.current);
+    closeTimeout.current = setTimeout(() => setMegaId(false), 100);
+  };
+
+  const cancelClose = () => {
+    if (closeTimeout.current) {
+      clearTimeout(closeTimeout.current);
+      closeTimeout.current = null;
+    }
+  };
 
   useEffect(() => {
     lastY.current = window.scrollY;
@@ -100,13 +128,13 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    if (megaId || mobileOpen) {
+    if (mobileOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
     }
     return () => document.body.classList.remove("overflow-hidden");
-  }, [megaId, mobileOpen]);
+  }, [mobileOpen]);
 
   useEffect(() => {
     if (megaId === false) {
@@ -126,7 +154,12 @@ export function Header() {
       const nw = Math.max(rect.width, 1);
       const nh = Math.max(rect.height, 1);
       const from = prevMegaDims.current;
-      if (from && from.w > 0 && from.h > 0) {
+      if (
+        from &&
+        from.w > 0 &&
+        from.h > 0 &&
+        (megaId === 102 || megaId === 23929)
+      ) {
         gsap.fromTo(
           activeEl,
           {
@@ -150,13 +183,11 @@ export function Header() {
 
   const hideAnnouncement = y > 20;
   const atTop = y <= 100;
-  const hideHeader =
-    dir === "down" && y > 100 && !hoverNav && !megaId && !mobileOpen;
+  const hideHeader = false; // Navbar is now permanently sticky
   const headerHidden = hideHeader || forceHideHeader;
 
   const megaPrimary = megaId === 102 || megaId === 23929;
-  const megaSecondary =
-    megaId === 103 || megaId === 16913 || megaId === 106;
+  const megaSecondary = megaId === 103 || megaId === 16913 || megaId === 106;
 
   return (
     <>
@@ -193,14 +224,23 @@ export function Header() {
         <div
           className={cn(
             "fixed inset-0 z-50 p-2 transition-opacity duration-500 | lg:hidden",
-            mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
+            mobileOpen
+              ? "pointer-events-auto opacity-100"
+              : "pointer-events-none opacity-0",
           )}
         >
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-xl" onClick={() => setMobileOpen(false)} />
-          
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-xl"
+            onClick={() => setMobileOpen(false)}
+          />
+
           <motion.div
             initial={false}
-            animate={mobileOpen ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.95, y: 20 }}
+            animate={
+              mobileOpen
+                ? { opacity: 1, scale: 1, y: 0 }
+                : { opacity: 0, scale: 0.95, y: 20 }
+            }
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="relative flex h-full w-full flex-col overflow-hidden rounded-[2rem] bg-grey-900/90 p-4 pt-16 shadow-2xl"
           >
@@ -225,8 +265,13 @@ export function Header() {
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, y: 20 }}
-                    animate={mobileOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ delay: mobileOpen ? 0.1 + i * 0.05 : 0, duration: 0.5 }}
+                    animate={
+                      mobileOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                    }
+                    transition={{
+                      delay: mobileOpen ? 0.1 + i * 0.05 : 0,
+                      duration: 0.5,
+                    }}
                     className="border-b border-white/10"
                   >
                     <div className="flex items-center justify-between py-4">
@@ -239,38 +284,51 @@ export function Header() {
                       </Link>
                       {item.sub && item.sub.length > 0 && (
                         <button
-                          onClick={() => setExpanded(expanded === item.label ? null : item.label)}
+                          onClick={() =>
+                            setExpanded(
+                              expanded === item.label ? null : item.label,
+                            )
+                          }
                           className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20"
                         >
-                          <span className={cn("text-white transition-transform duration-300", expanded === item.label ? "rotate-180" : "rotate-0")}>
+                          <span
+                            className={cn(
+                              "text-white transition-transform duration-300",
+                              expanded === item.label
+                                ? "rotate-180"
+                                : "rotate-0",
+                            )}
+                          >
                             <ArrowUpRight className="size-4 rotate-90" />
                           </span>
                         </button>
                       )}
                     </div>
-                    
+
                     {/* Sub-menu Accordion */}
-                    {item.sub && item.sub.length > 0 && expanded === item.label && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        className="overflow-hidden pb-4"
-                      >
-                        <ul className="flex flex-col gap-3 pl-2">
-                          {item.sub.map((sub) => (
-                            <li key={sub.label}>
-                              <Link
-                                href={sub.href}
-                                className="text-xl text-white/60"
-                                onClick={() => setMobileOpen(false)}
-                              >
-                                {sub.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </motion.div>
-                    )}
+                    {item.sub &&
+                      item.sub.length > 0 &&
+                      expanded === item.label && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          className="overflow-hidden pb-4"
+                        >
+                          <ul className="flex flex-col gap-3 pl-2">
+                            {item.sub.map((sub) => (
+                              <li key={sub.label}>
+                                <Link
+                                  href={sub.href}
+                                  className="text-xl text-white/60"
+                                  onClick={() => setMobileOpen(false)}
+                                >
+                                  {sub.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
                   </motion.div>
                 ))}
               </nav>
@@ -284,19 +342,26 @@ export function Header() {
                   Get in Touch
                   <ArrowUpRight className="size-5" />
                 </Link>
-                
+
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">
                   <div className="flex flex-col gap-2">
-                    <p className="text-xs font-bold uppercase tracking-widest text-white/40">Offices</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-white/40">
+                      Offices
+                    </p>
                     <ul className="flex flex-col gap-1 text-lg font-medium text-white">
-                      <li>SHEFFIELD <span className="text-xs text-white/40">(HQ)</span></li>
+                      <li>
+                        SHEFFIELD{" "}
+                        <span className="text-xs text-white/40">(HQ)</span>
+                      </li>
                       <li>LONDON</li>
                       <li>MANCHESTER</li>
                       <li>NEW YORK</li>
                     </ul>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <p className="text-xs font-bold uppercase tracking-widest text-white/40">Social</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-white/40">
+                      Social
+                    </p>
                     <ul className="flex flex-col gap-1 text-lg font-medium text-white">
                       <li>INSTAGRAM</li>
                       <li>LINKEDIN</li>
@@ -307,7 +372,9 @@ export function Header() {
                 </div>
 
                 <div className="flex flex-col gap-4 border-t border-white/10 pt-12">
-                  <p className="text-xs font-bold uppercase tracking-widest text-white/40">Our Mission</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-white/40">
+                    Our Mission
+                  </p>
                   <h3 className="text-3xl font-medium leading-none tracking-tight text-white">
                     We Create Category Leaders on every searchable platform
                   </h3>
@@ -334,7 +401,7 @@ export function Header() {
           )}
           onMouseLeave={() => {
             setHoverNav(false);
-            setMegaId(false);
+            closeMega();
           }}
         >
           <Link
@@ -362,9 +429,7 @@ export function Header() {
                     atTop && megaId !== item.mega
                       ? "text-white"
                       : "text-grey-900",
-                    item.mega &&
-                      megaId === item.mega &&
-                      "text-grey-900",
+                    item.mega && megaId === item.mega && "text-grey-900",
                   )}
                   onMouseEnter={() => {
                     if (item.mega) setMegaId(item.mega);
@@ -415,16 +480,23 @@ export function Header() {
           className={cn(
             "pointer-events-none fixed left-1/2 z-[60] hidden -translate-x-1/2 -translate-y-4 opacity-0 transition-all duration-300 | pointer-fine:block",
             "top-20 lg:top-24",
-            megaPrimary && !headerHidden && "pointer-events-auto translate-y-0 opacity-100",
+            megaPrimary &&
+              !headerHidden &&
+              "pointer-events-auto translate-y-0 opacity-100",
           )}
-          onMouseEnter={() => setHoverNav(true)}
-          onMouseLeave={() => setMegaId(false)}
+          onMouseEnter={() => {
+            setHoverNav(true);
+            cancelClose();
+          }}
+          onMouseLeave={closeMega}
         >
           <div
             ref={megaA}
             className={cn(
               "rounded-3xl bg-white shadow-2xl transition-opacity duration-200",
-              megaPrimary && !headerHidden ? "opacity-100" : "pointer-events-none opacity-0",
+              megaPrimary && !headerHidden
+                ? "opacity-100"
+                : "pointer-events-none opacity-0",
             )}
           >
             <div className="flex gap-x-12 px-10 py-7 | xl:px-12 xl:py-8">
@@ -458,16 +530,23 @@ export function Header() {
           className={cn(
             "pointer-events-none fixed left-1/2 z-[60] hidden -translate-x-1/2 -translate-y-4 opacity-0 transition-all duration-300 | pointer-fine:block",
             "top-20 lg:top-24",
-            megaSecondary && !headerHidden && "pointer-events-auto translate-y-0 opacity-100",
+            megaSecondary &&
+              !headerHidden &&
+              "pointer-events-auto translate-y-0 opacity-100",
           )}
-          onMouseEnter={() => setHoverNav(true)}
-          onMouseLeave={() => setMegaId(false)}
+          onMouseEnter={() => {
+            setHoverNav(true);
+            cancelClose();
+          }}
+          onMouseLeave={closeMega}
         >
           <div
             ref={megaB}
             className={cn(
               "min-w-[280px] rounded-3xl bg-white px-10 py-7 shadow-2xl transition-opacity duration-200 | xl:px-12 xl:py-8",
-              megaSecondary && !headerHidden ? "opacity-100" : "pointer-events-none opacity-0",
+              megaSecondary && !headerHidden
+                ? "opacity-100"
+                : "pointer-events-none opacity-0",
             )}
           >
             {megaId === 103 && (
@@ -496,7 +575,9 @@ export function Header() {
                   {megaId === 106 && (
                     <>
                       <Link href="/blog">Blog</Link>
-                      <Link href="/category-leaderboard">Category Leaderboard</Link>
+                      <Link href="/category-leaderboard">
+                        Category Leaderboard
+                      </Link>
                     </>
                   )}
                 </div>
