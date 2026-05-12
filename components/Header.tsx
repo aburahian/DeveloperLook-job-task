@@ -481,8 +481,8 @@ export function Header() {
             "pointer-events-none fixed left-1/2 z-[60] hidden -translate-x-1/2 -translate-y-4 opacity-0 transition-all duration-300 | pointer-fine:block",
             "top-20 lg:top-24",
             megaPrimary &&
-              !headerHidden &&
-              "pointer-events-auto translate-y-0 opacity-100",
+            !headerHidden &&
+            "pointer-events-auto translate-y-0 opacity-100",
           )}
           onMouseEnter={() => {
             setHoverNav(true);
@@ -531,8 +531,8 @@ export function Header() {
             "pointer-events-none fixed left-1/2 z-[60] hidden -translate-x-1/2 -translate-y-4 opacity-0 transition-all duration-300 | pointer-fine:block",
             "top-20 lg:top-24",
             megaSecondary &&
-              !headerHidden &&
-              "pointer-events-auto translate-y-0 opacity-100",
+            !headerHidden &&
+            "pointer-events-auto translate-y-0 opacity-100",
           )}
           onMouseEnter={() => {
             setHoverNav(true);
